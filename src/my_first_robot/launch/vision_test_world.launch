@@ -1,0 +1,17 @@
+<launch>
+  <arg name="model" default="burger" />
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+
+  <param name="robot_description" command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model turtlebot3_$(arg model) -param robot_description" />
+
+  <param name="green_cube_description" textfile="$(find my_first_robot)/launch/green_cube.urdf" />
+
+  <node name="spawn_green_cube" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param green_cube_description -model green_cube -x 1.0 -y 0.5 -z 0.5" />
+        
+  <node name="color_detector_node" pkg="my_first_robot" type="color_detector.py" output="screen" />
+
+</launch>

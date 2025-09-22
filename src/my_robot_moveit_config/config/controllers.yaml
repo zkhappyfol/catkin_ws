@@ -1,0 +1,18 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+    use_sim_time: true
+
+arm_controller:
+  type: "effort_controllers/JointTrajectoryController"
+  joints:
+    - shoulder_joint
+    - elbow_joint
+  gains:
+    shoulder_joint: {p: 100, d: 1, i: 1, i_clamp: 1}
+    elbow_joint: {p: 100, d: 1, i: 1, i_clamp: 1}
+
+    # --- 【新增】负责汇报关节状态的控制器 ---
+joint_state_controller:
+  type: "joint_state_controller/JointStateController"
+  publish_rate: 50

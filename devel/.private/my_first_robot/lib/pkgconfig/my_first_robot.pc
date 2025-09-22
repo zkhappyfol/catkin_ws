@@ -1,0 +1,8 @@
+prefix=/home/zkhappyfol/catkin_ws/devel/.private/my_first_robot
+
+Name: my_first_robot
+Description: Description of my_first_robot
+Version: 0.0.0
+Cflags: -I/home/zkhappyfol/catkin_ws/devel/.private/my_first_robot/include
+Libs: -L${prefix}/lib 
+Requires: 

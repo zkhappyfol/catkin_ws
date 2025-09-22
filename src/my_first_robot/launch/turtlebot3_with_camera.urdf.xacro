@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<robot name="turtlebot3_with_camera_and_depth" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro" />
+
+  <link name="camera_link">
+      <visual>
+        <geometry><box size="0.02 0.05 0.05"/></geometry>
+      </visual>
+      <collision>
+        <geometry><box size="0.02 0.05 0.05"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="0.01" />
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+      </inertial>
+    </link>
+    <gazebo reference="camera_link">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+    <joint name="camera_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="camera_link"/>
+      <origin xyz="0.05 0 0.08" rpy="0 0 0"/>
+    </joint>
+
+    <gazebo reference="camera_link">
+      <sensor type="camera" name="rgb_camera_sensor">
+        <update_rate>30.0</update_rate>
+        <camera name="rgb_camera">
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+        </camera>
+        <plugin name="rgb_camera_controller" filename="libgazebo_ros_camera.so">
+          <cameraName>camera/rgb</cameraName>
+          <frameName>camera_link_optical</frameName>
+        </plugin>
+      </sensor>
+
+      <sensor type="depth" name="depth_camera_sensor">
+        <update_rate>30.0</update_rate>
+        <camera name="depth_camera">
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R_FLOAT32</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>10.0</far>
+          </clip>
+        </camera>
+        <plugin name="depth_camera_controller" filename="libgazebo_ros_depth_camera.so">
+          <cameraName>camera/depth</cameraName>
+          <frameName>camera_link_optical</frameName>
+          <pointCloudTopicName>points</pointCloudTopicName>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+  <link name="arm_upper_link">
+  <visual>
+    <geometry><box size="0.02 0.02 0.1"/></geometry>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    </visual>
+  <collision>
+    <geometry><box size="0.02 0.02 0.1"/></geometry>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+  </collision>
+  <inertial>
+    <mass value="0.1"/>
+    <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+  </inertial>
+</link>
+<gazebo reference="arm_upper_link">
+  <material>Gazebo/Orange</material>
+</gazebo>
+
+<joint name="shoulder_joint" type="revolute">
+  <parent link="base_link"/>
+  <child link="arm_upper_link"/>
+  <origin xyz="0.0 0 0.2"/> 
+  <axis xyz="0 1 0"/>
+  <limit lower="-1.57" upper="1.57" effort="100" velocity="1.0"/>
+</joint>
+
+<link name="arm_forearm_link">
+  <visual>
+    <geometry><box size="0.1 0.02 0.02"/></geometry>
+    <origin xyz="0.05 0 0" rpy="0 0 0"/>
+  </visual>
+  <collision>
+    <geometry><box size="0.1 0.02 0.02"/></geometry>
+    <origin xyz="0.05 0 0" rpy="0 0 0"/>
+  </collision>
+  <inertial>
+    <mass value="0.1"/>
+    <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+  </inertial>
+</link>
+<gazebo reference="arm_forearm_link">
+  <material>Gazebo/Orange</material>
+</gazebo>
+
+<joint name="elbow_joint" type="revolute">
+  <parent link="arm_upper_link"/>
+  <child link="arm_forearm_link"/>
+  <origin xyz="0 0 0.1"/>
+  <axis xyz="0 1 0"/>
+  <limit lower="-1.57" upper="1.57" effort="100" velocity="1.0"/>
+</joint>
+
+<transmission name="shoulder_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="shoulder_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="shoulder_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="elbow_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="elbow_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="elbow_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
+
+
+</robot>

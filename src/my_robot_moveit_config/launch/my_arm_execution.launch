@@ -1,0 +1,22 @@
+<launch>
+
+  <arg name="fake_execution" />
+
+  <include file="$(find my_first_robot)/launch/final_world.launch" />
+
+  <rosparam file="$(find my_robot_moveit_config)/config/controllers.yaml" />
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="arm_controller joint_state_controller" />
+
+  <include file="$(find my_robot_moveit_config)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <include file="$(find my_robot_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="rviz_config" value="$(find my_robot_moveit_config)/launch/moveit.rviz"/>
+  </include>
+</launch>

@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/zkhappyfol/catkin_ws/devel/.private/my_first_robot/setup.sh

@@ -1,0 +1,13 @@
+<launch>
+  <arg name="model" default="burger" />
+
+  <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_world.launch">
+    <arg name="model" value="$(arg model)" />
+  </include>
+
+  <param name="green_cube_description" textfile="$(find my_first_robot)/launch/green_cube.urdf" />
+
+  <node name="spawn_green_cube" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param green_cube_description -model green_cube -x 2 -y 2 -z 0.5" />
+
+</launch>

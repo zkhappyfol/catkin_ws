@@ -1,0 +1,12 @@
+<launch>
+    <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+
+    <param name="camera_description" textfile="$(find my_first_robot)/launch/camera.urdf" />
+    <node name="spawn_camera" pkg="gazebo_ros" type="spawn_model"
+          args="-urdf -param camera_description -model my_camera -z 1" />
+
+    <param name="green_cube_description" textfile="$(find my_first_robot)/launch/green_cube.urdf" />
+    <node name="spawn_green_cube" pkg="gazebo_ros" type="spawn_model"
+          args="-urdf -param green_cube_description -model green_cube -x 0.5 -y 0 -z 0.5" />
+
+</launch>

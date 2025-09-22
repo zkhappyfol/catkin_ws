@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: my_first_robot
+    relative_path: launch/turtlebot3_with_camera.urdf.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/turtlebot3_with_camera_and_depth.srdf
+  CONFIG:
+    author_name: zkhappyfol
+    author_email: karenzeng85@gmail.com
+    generated_timestamp: 1755846953

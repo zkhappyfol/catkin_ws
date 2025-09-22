@@ -1,0 +1,23 @@
+<launch>
+    <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+
+    <param name="robot_description" command="$(find xacro)/xacro '$(find my_first_robot)/launch/turtlebot3_with_camera.urdf.xacro'" />
+
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model my_cool_robot -param robot_description" />
+
+    <param name="green_cube_description" textfile="$(find my_first_robot)/launch/green_cube.urdf" />
+    <node name="spawn_green_cube" pkg="gazebo_ros" type="spawn_model"
+          args="-urdf -param green_cube_description -model green_cube -x 1.0 -y 0.5 -z 0.5" />
+
+    <param name="yellow_cylinder_description" textfile="$(find my_first_robot)/launch/yellow_cylinder.urdf" />
+    <node name="spawn_yellow_cylinder" pkg="gazebo_ros" type="spawn_model"
+          args="-urdf -param yellow_cylinder_description -model yellow_cylinder -x 1.0 -y -0.5 -z 0.5" />
+
+    <param name="blue_sphere_description" textfile="$(find my_first_robot)/launch/blue_sphere.urdf" />
+    <node name="spawn_blue_sphere" pkg="gazebo_ros" type="spawn_model"
+          args="-urdf -param blue_sphere_description -model blue_sphere -x 0.5 -y 1.0 -z 0.5" />
+
+    <node name="color_detector_node" pkg="my_first_robot" type="mission_command_old.py" output="screen" />
+</launch>
+
+
